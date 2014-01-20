@@ -30,6 +30,8 @@ public class Sonido extends Applet implements Runnable, KeyListener {
     private ImageIcon elefante;		// Imagen del elefante
     URL eURL_derecha = this.getClass().getResource("/imagenes/elefante.gif");
     URL eURL_izquierda = this.getClass().getResource("/imagenes/elefante-izquierda.gif");
+    URL eURL_colision_derecha = this.getClass().getResource("/imagenes/elefante-ouch.gif");
+    URL eURL_colision_izquierda = this.getClass().getResource("/imagenes/elefante-izquierda-ouch.gif");
 
     private int altura_elefante;
     private int largo_elefante;
@@ -139,18 +141,60 @@ public class Sonido extends Applet implements Runnable, KeyListener {
      */
     public void checaColision() {
         if (!en_colision) {
-            if (y_pos == 0 || y_pos + altura_elefante > getHeight()
-                    || x_pos == 0 || x_pos + largo_elefante > getWidth()) {
-                en_colision = true;
-                velocidad = 0;
-                contador_ciclos_en_colision = ciclos_en_colision_default;
-                sonido.play();
+            switch (direccion) {
+                case 1: { //Revisa colision cuando sube
+                    if (y_pos < 0) {
+                        en_colision = true;
+                        cambio_imagen = true;
+                        velocidad = 0;
+                        contador_ciclos_en_colision = ciclos_en_colision_default;
+
+                        direccion = 2;
+                        sonido.play();
+                    }
+                    break;
+                }
+                case 2: { //Revisa colision cuando baja
+                    if (y_pos + elefante.getIconHeight() > getHeight()) {
+                        en_colision = true;
+                        cambio_imagen = true;
+                        velocidad = 0;
+                        contador_ciclos_en_colision = ciclos_en_colision_default;
+
+                        direccion = 1;
+                        sonido.play();
+                    }
+                    break;
+                }
+                case 3: { //Revisa colision cuando va izquierda.
+                    if (x_pos < 0) {
+                        en_colision = true;
+                        cambio_imagen = true;
+                        velocidad = 0;
+                        contador_ciclos_en_colision = ciclos_en_colision_default;
+
+                        direccion = 4;
+                        sonido.play();
+                    }
+                    break;
+                }
+                case 4: { //Revisa colision cuando va derecha.
+                    if (x_pos + elefante.getIconWidth() > getWidth()) {
+                        en_colision = true;
+                        cambio_imagen = true;
+                        velocidad = 0;
+                        contador_ciclos_en_colision = ciclos_en_colision_default;
+                        direccion = 3;
+                        sonido.play();
+                    }
+                    break;
+                }
             }
         } else {
             contador_ciclos_en_colision--;
             if (contador_ciclos_en_colision == -1) {
                 en_colision = false;
-                invertirDireccion();
+                cambio_imagen = true;
                 velocidad = 1;
             }
         }
@@ -288,8 +332,22 @@ public class Sonido extends Applet implements Runnable, KeyListener {
             //Dibuja la imagen en la posicion actualizada
             if (cambio_imagen) {
                 if (en_colision) {
-//                    Cambio la imagen del elefante por la imagen de su colision.
-//                    elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_derecha));
+                    /*
+                    Cambio la imagen del elefante por la imagen de su colision.
+                    Si la direccion es hacia la izquierda, quiere decir
+                    que iba hacia la derecha y cuando chocó 
+                    checaColision() lo preparó para su cambio
+                    y cambio su direccion.
+                    Entonces pongo la imagen de colision de la derecha.
+                    Si iba hacia la izquierda, arriba o abajo, cambio su imagen
+                    de colision por la de la izquierda. Esto a falta de elefantes
+                    que vayan para arriba y abajo.
+                    */
+                    if (direccion == 3) {
+                        elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_colision_derecha));
+                    } else {
+                        elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_colision_izquierda));
+                    }
                 } else {
                     if (direccion == 3) {
                         elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_izquierda));
