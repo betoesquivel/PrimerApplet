@@ -1,3 +1,4 @@
+package source;
 
 /**
  * Clase para ejemplificar el uso de sonido en el Applet
@@ -113,24 +114,22 @@ public class Sonido extends Applet implements Runnable, KeyListener {
      * Metodo que actualiza la posicion del objeto elefante
      */
     public void actualiza() {
-        if (!en_colision) {
-            switch (direccion) {
-                case 1: {
-                    y_pos -= velocidad;
-                    break;    //se mueve hacia arriba
-                }
-                case 2: {
-                    y_pos += velocidad;
-                    break;    //se mueve hacia abajo
-                }
-                case 3: {
-                    x_pos -= velocidad;
-                    break;    //se mueve hacia izquierda
-                }
-                case 4: {
-                    x_pos += velocidad;
-                    break;    //se mueve hacia derecha	
-                }
+        switch (direccion) {
+            case 1: {
+                y_pos -= velocidad;
+                break;    //se mueve hacia arriba
+            }
+            case 2: {
+                y_pos += velocidad;
+                break;    //se mueve hacia abajo
+            }
+            case 3: {
+                x_pos -= velocidad;
+                break;    //se mueve hacia izquierda
+            }
+            case 4: {
+                x_pos += velocidad;
+                break;    //se mueve hacia derecha	
             }
         }
     }
@@ -146,10 +145,10 @@ public class Sonido extends Applet implements Runnable, KeyListener {
                     if (y_pos < 0) {
                         en_colision = true;
                         cambio_imagen = true;
-                        velocidad = 0;
                         contador_ciclos_en_colision = ciclos_en_colision_default;
 
                         direccion = 2;
+                        velocidad = 1; 
                         sonido.play();
                     }
                     break;
@@ -158,10 +157,10 @@ public class Sonido extends Applet implements Runnable, KeyListener {
                     if (y_pos + elefante.getIconHeight() > getHeight()) {
                         en_colision = true;
                         cambio_imagen = true;
-                        velocidad = 0;
                         contador_ciclos_en_colision = ciclos_en_colision_default;
 
                         direccion = 1;
+                        velocidad = 1; 
                         sonido.play();
                     }
                     break;
@@ -170,10 +169,10 @@ public class Sonido extends Applet implements Runnable, KeyListener {
                     if (x_pos < 0) {
                         en_colision = true;
                         cambio_imagen = true;
-                        velocidad = 0;
                         contador_ciclos_en_colision = ciclos_en_colision_default;
 
                         direccion = 4;
+                        velocidad = 1;
                         sonido.play();
                     }
                     break;
@@ -182,9 +181,9 @@ public class Sonido extends Applet implements Runnable, KeyListener {
                     if (x_pos + elefante.getIconWidth() > getWidth()) {
                         en_colision = true;
                         cambio_imagen = true;
-                        velocidad = 0;
                         contador_ciclos_en_colision = ciclos_en_colision_default;
                         direccion = 3;
+                        velocidad = 1; 
                         sonido.play();
                     }
                     break;
@@ -195,7 +194,6 @@ public class Sonido extends Applet implements Runnable, KeyListener {
             if (contador_ciclos_en_colision == -1) {
                 en_colision = false;
                 cambio_imagen = true;
-                velocidad = 1;
             }
         }
     }
@@ -238,7 +236,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_UP) {    //Presiono flecha arriba
             if (direccion == 2) {
                 velocidad--;
-                if (velocidad < 0) {
+                if (velocidad <= 0) {
                     velocidad = 1;
                     direccion = 1;
                 }
@@ -251,7 +249,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {    //Presiono flecha abajo
             if (direccion == 1) {
                 velocidad--;
-                if (velocidad < 0) {
+                if (velocidad <= 0) {
                     velocidad = 1;
                     direccion = 2;
                 }
@@ -264,7 +262,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {    //Presiono flecha izquierda
             if (direccion == 4) {
                 velocidad--;
-                if (velocidad < 0) {
+                if (velocidad <= 0) {
                     velocidad = 1;
                     direccion = 3;
                     cambio_imagen = true;
@@ -279,7 +277,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {    //Presiono flecha derecha
             if (direccion == 3) {
                 velocidad--;
-                if (velocidad < 0) {
+                if (velocidad <= 0) {
                     velocidad = 1;
                     direccion = 4;
                     cambio_imagen = true;
@@ -333,17 +331,17 @@ public class Sonido extends Applet implements Runnable, KeyListener {
             if (cambio_imagen) {
                 if (en_colision) {
                     /*
-                    Cambio la imagen del elefante por la imagen de su colision.
-                    Si la direccion es hacia la izquierda, quiere decir
-                    que iba hacia la derecha y cuando chocó 
-                    checaColision() lo preparó para su cambio
-                    y cambio su direccion.
-                    Entonces pongo la imagen de colision de la derecha.
-                    Si iba hacia la izquierda, arriba o abajo, cambio su imagen
-                    de colision por la de la izquierda. Esto a falta de elefantes
-                    que vayan para arriba y abajo.
-                    */
-                    if (direccion == 3) {
+                     Cambio la imagen del elefante por la imagen de su colision.
+                     Si la direccion es hacia la izquierda, quiere decir
+                     que iba hacia la derecha y cuando chocó 
+                     checaColision() lo preparó para su cambio
+                     y cambio su direccion.
+                     Entonces pongo la imagen de colision de la derecha.
+                     Si iba hacia la izquierda, arriba o abajo, cambio su imagen
+                     de colision por la de la izquierda. Esto a falta de elefantes
+                     que vayan para arriba y abajo.
+                     */
+                    if (direccion == 4) {
                         elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_colision_derecha));
                     } else {
                         elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_colision_izquierda));
