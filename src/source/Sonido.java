@@ -110,61 +110,37 @@ public class Sonido extends Applet implements Runnable, KeyListener {
      * orillas del <code>Applet</code>.
      */
     public void checkCollision() {
-        if (!en_colision) {
-            switch (direccion) {
-                case 1: { //Revisa colision cuando sube
-                    if (y_pos < 0) {
-                        en_colision = true;
-                        cambio_imagen = true;
-                        contador_ciclos_en_colision = ciclos_en_colision_default;
-
-                        direccion = 2;
-                        velocidad = 1;
-                        sonido.play();
+        if (!mySaucer.isIn_collision()) {
+            switch (mySaucer.getDirection()) {
+                case UP: { //Revisa colision cuando sube
+                    if (mySaucer.getPos_y() < 0) {
+                        mySaucer.collide(UP);
                     }
                     break;
                 }
-                case 2: { //Revisa colision cuando baja
-                    if (y_pos + elefante.getIconHeight() > getHeight()) {
-                        en_colision = true;
-                        cambio_imagen = true;
-                        contador_ciclos_en_colision = ciclos_en_colision_default;
-
-                        direccion = 1;
-                        velocidad = 1;
-                        sonido.play();
+                case DOWN: { //Revisa colision cuando baja
+                    if (mySaucer.getPos_y() + mySaucer.getHeight() > getHeight()) {
+                        mySaucer.collide(DOWN);
                     }
                     break;
                 }
-                case 3: { //Revisa colision cuando va izquierda.
-                    if (x_pos < 0) {
-                        en_colision = true;
-                        cambio_imagen = true;
-                        contador_ciclos_en_colision = ciclos_en_colision_default;
-
-                        direccion = 4;
-                        velocidad = 1;
-                        sonido.play();
+                case LEFT: { //Revisa colision cuando va izquierda.
+                    if (mySaucer.getPos_x() < 0) {
+                        mySaucer.collide(LEFT);
                     }
                     break;
                 }
-                case 4: { //Revisa colision cuando va derecha.
-                    if (x_pos + elefante.getIconWidth() > getWidth()) {
-                        en_colision = true;
-                        cambio_imagen = true;
-                        contador_ciclos_en_colision = ciclos_en_colision_default;
-                        direccion = 3;
-                        velocidad = 1;
-                        sonido.play();
+                case RIGHT: { //Revisa colision cuando va derecha.
+                    if (mySaucer.getPos_x() + mySaucer.getWidth() > getWidth()) {
+                        mySaucer.collide(RIGHT);
                     }
                     break;
                 }
             }
         } else {
-            contador_ciclos_en_colision--;
-            if (contador_ciclos_en_colision == -1) {
-                en_colision = false;
-                cambio_imagen = true;
+            mySaucer.decreaseCollisionCyclesCounter();
+            if (mySaucer.getCollision_cycles_counter() == -1) {
+                mySaucer.stopColliding();
             }
         }
     }
@@ -205,60 +181,48 @@ public class Sonido extends Applet implements Runnable, KeyListener {
      */
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {    //Presiono flecha arriba
-            if (direccion == 2) {
-                velocidad--;
-                if (velocidad <= 0) {
-                    velocidad = 1;
-                    direccion = 1;
+            if (mySaucer.getDirection() == DOWN) {
+                mySaucer.deccelerate();
+                if (mySaucer.getSpeed() <= 0) {
+                    mySaucer.changeDirection(UP);
                 }
-            } else if (direccion == 1) {
-                velocidad++;
+            } else if (mySaucer.getDirection() == UP) {
+                mySaucer.accelerate();
             } else {
-                velocidad = 1;
-                direccion = 1;
+                mySaucer.changeDirection(UP);
             }
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {    //Presiono flecha abajo
-            if (direccion == 1) {
-                velocidad--;
-                if (velocidad <= 0) {
-                    velocidad = 1;
-                    direccion = 2;
+            if (mySaucer.getDirection() == UP) {
+                mySaucer.deccelerate();
+                if (mySaucer.getSpeed() <= 0) {
+                    mySaucer.changeDirection(DOWN);
                 }
-            } else if (direccion == 2) {
-                velocidad++;
+            } else if (mySaucer.getDirection() == DOWN) {
+                mySaucer.accelerate();
             } else {
-                velocidad = 1;
-                direccion = 2;
+                mySaucer.changeDirection(DOWN);
             }
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {    //Presiono flecha izquierda
-            if (direccion == 4) {
-                velocidad--;
-                if (velocidad <= 0) {
-                    velocidad = 1;
-                    direccion = 3;
-                    cambio_imagen = true;
+            if (mySaucer.getDirection() == RIGHT) {
+                mySaucer.deccelerate();
+                if (mySaucer.getSpeed() <= 0) {
+                    mySaucer.changeDirection(LEFT);
                 }
-            } else if (direccion == 3) {
-                velocidad++;
+            } else if (mySaucer.getDirection() == LEFT) {
+                mySaucer.accelerate();
             } else {
-                velocidad = 1;
-                direccion = 3;
-                cambio_imagen = true;
+                mySaucer.changeDirection(LEFT);
             }
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {    //Presiono flecha derecha
-            if (direccion == 3) {
-                velocidad--;
-                if (velocidad <= 0) {
-                    velocidad = 1;
-                    direccion = 4;
-                    cambio_imagen = true;
+            if (mySaucer.getDirection() == LEFT) {
+                mySaucer.deccelerate();
+                if (mySaucer.getSpeed() <= 0) {
+                    mySaucer.changeDirection(RIGHT);
                 }
-            } else if (direccion == 4) {
-                velocidad++;
+            } else if (mySaucer.getDirection() == RIGHT) {
+                mySaucer.accelerate();
             } else {
-                velocidad = 1;
-                direccion = 4;
-                cambio_imagen = true;
+                mySaucer.changeDirection(RIGHT);
             }
         }
     }
@@ -297,58 +261,14 @@ public class Sonido extends Applet implements Runnable, KeyListener {
      * @param g es el <code>objeto grafico</code> usado para dibujar.
      */
     public void paint(Graphics g) {
-        if (elefante != null) {
+        if (mySaucer != null) {
             //Dibuja la imagen en la posicion actualizada
-            if (cambio_imagen) {
-                if (en_colision) {
-                    /*
-                     Cambio la imagen del elefante por la imagen de su colision.
-                     Si la direccion es hacia la izquierda, quiere decir
-                     que iba hacia la derecha y cuando chocó 
-                     checkCollision() lo preparó para su cambio
-                     y cambio su direccion.
-                     Entonces pongo la imagen de colision de la derecha.
-                     Si iba hacia la izquierda, arriba o abajo, cambio su imagen
-                     de colision por la de la izquierda. Esto a falta de elefantes
-                     que vayan para arriba y abajo.
-                     */
-                    if (direccion == 4) {
-                        elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_colision_derecha));
-                    } else {
-                        elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_colision_izquierda));
-                    }
-                } else {
-                    if (direccion == 3) {
-                        elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_izquierda));
-                    } else {
-                        elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_derecha));
-                    }
-                }
-                cambio_imagen = false;
-            }
-            g.drawImage(elefante.getImage(), x_pos, y_pos, this);
-
+            g.drawImage(mySaucer.getIcon().getImage(), mySaucer.getPos_x(), mySaucer.getPos_y(), this);
         } else {
             //Da un mensaje mientras se carga el dibujo	
-            g.drawString("Estoy cargando..", 10, 10);
-        }
-
-    }
-
-    public void invertirDireccion() {
-        switch (direccion) {
-            case 1:
-                direccion = 2;
-                break;
-            case 2:
-                direccion = 1;
-                break;
-            case 3:
-                direccion = 4;
-                break;
-            case 4:
-                direccion = 3;
-                break;
+            g.drawString("Loading...", 10, 10);
         }
     }
+
+
 }

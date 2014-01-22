@@ -64,10 +64,13 @@ public class Character extends Applet {
         this.collision_sound_URL = collision_sound_URL;
 
         icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(image_URL));
+        width = icon.getIconWidth();
+        height = icon.getIconHeight();
+
         collision_sound = getAudioClip(collision_sound_URL);
-        
-        in_collision = false; 
-        change_image = false; 
+
+        in_collision = false;
+        change_image = false;
 
     }
 
@@ -224,6 +227,15 @@ public class Character extends Applet {
     }
 
     //ACTIONS
+    public void stopColliding() {
+        in_collision = false;
+        change_image = true;
+    }
+
+    public void decreaseCollisionCyclesCounter() {
+        setCollision_cycles_counter(collision_cycles_counter - 1);
+    }
+
     /**
      * Changes the direction of the character, the only difference from setter
      * is that here eventually I will check for future collisions. It also
@@ -278,7 +290,7 @@ public class Character extends Applet {
         } else {
             icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(image_URL));
         }
-        change_image = false; 
+        change_image = false;
     }
 
     /**
@@ -316,7 +328,28 @@ public class Character extends Applet {
         }
     }
 
-    public void collide() {
-
+    /**
+     * puts the object in a state of collision
+     *
+     * @param direction
+     */
+    public void collide(int direction) {
+        in_collision = true;
+        change_image = true; 
+        collision_cycles_counter = collision_duration_in_cycles;
+        switch (direction) {
+            case UP:
+                changeDirection(DOWN);
+                break;
+            case DOWN:
+                changeDirection(UP);
+                break;
+            case RIGHT:
+                changeDirection(LEFT);
+                break;
+            case LEFT:
+                changeDirection(RIGHT);
+                break;
+        }
     }
 }
