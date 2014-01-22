@@ -67,7 +67,7 @@ public class Character extends Applet {
         width = icon.getIconWidth();
         height = icon.getIconHeight();
 
-        collision_sound = getAudioClip(collision_sound_URL);
+        //collision_sound = getAudioClip(collision_sound_URL);
 
         in_collision = false;
         change_image = false;
@@ -337,6 +337,7 @@ public class Character extends Applet {
         in_collision = true;
         change_image = true; 
         collision_cycles_counter = collision_duration_in_cycles;
+        collision_sound.play();
         switch (direction) {
             case UP:
                 changeDirection(DOWN);

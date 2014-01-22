@@ -37,8 +37,8 @@ public class Sonido extends Applet implements Runnable, KeyListener {
 
     private Omni mySaucer;
     private ImageIcon elefante;		// Imagen del elefante
-    URL eURL_saucer = this.getClass().getResource("/imagenes/flying-saucer.gif");
-    URL eURL_collision = this.getClass().getResource("/imagenes/flying-saucer-collision.gif");
+    URL eURL_saucer = this.getClass().getResource("/imagenes/flying-saucer-2.gif");
+    URL eURL_collision = this.getClass().getResource("/imagenes/flying-saucer-collision-2.gif");
 
     private int altura_elefante;
     private int largo_elefante;
@@ -51,7 +51,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
     private int contador_ciclos_en_colision;
 
     private AudioClip sonido;       // Objeto AudioClip
-    URL eaURL = this.getClass().getResource("/sonidos/elephant.wav");
+    URL eaURL = this.getClass().getResource("/sonidos/8-bit-explosion.wav");
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -65,7 +65,10 @@ public class Sonido extends Applet implements Runnable, KeyListener {
         y_pos = (int) (Math.random() * (getHeight() / 4));    // posicion en y es un cuarto del applet
 
         mySaucer = new Omni(x_pos, y_pos, eURL_saucer, eURL_collision, eaURL);
-
+        
+        sonido = getAudioClip(eaURL);
+        mySaucer.setCollision_sound(sonido);
+        
         addKeyListener(this);
 
     }
