@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package source;
 
+import java.applet.AudioClip;
 import java.net.URL;
 
 /**
@@ -14,8 +14,8 @@ import java.net.URL;
  */
 public class Omni extends Character {
 
-    public Omni(int pos_x, int pos_y, URL image_URL, URL collision_image_URL, URL collision_sound_URL) {
-        super(pos_x, pos_y, image_URL, collision_image_URL, collision_sound_URL);
+    public Omni(int pos_x, int pos_y, URL image_URL, URL collision_image_URL, AudioClip collision_sound) {
+        super(pos_x, pos_y, image_URL, collision_image_URL, collision_sound);
     }
-    
+
 }

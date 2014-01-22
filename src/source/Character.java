@@ -56,19 +56,20 @@ public class Character extends Applet {
     private AudioClip collision_sound;//collision sound
     private URL collision_sound_URL; //collision image_URL
 
-    public Character(int pos_x, int pos_y, URL image_URL, URL collision_image_URL, URL collision_sound_URL) {
+    public Character(int pos_x, int pos_y, URL image_URL, URL collision_image_URL, AudioClip collision_sound) {
         this.pos_x = pos_x;
         this.pos_y = pos_y;
+        this.speed = DEFAULT_SPEED;
+        this.direction = DEFAULT_DIRECTION;
+
         this.image_URL = image_URL;
         this.collision_image_URL = collision_image_URL;
-        this.collision_sound_URL = collision_sound_URL;
-
+        this.collision_sound = collision_sound;
         icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(image_URL));
         width = icon.getIconWidth();
         height = icon.getIconHeight();
 
         //collision_sound = getAudioClip(collision_sound_URL);
-
         in_collision = false;
         change_image = false;
 
@@ -335,7 +336,7 @@ public class Character extends Applet {
      */
     public void collide(int direction) {
         in_collision = true;
-        change_image = true; 
+        change_image = true;
         collision_cycles_counter = collision_duration_in_cycles;
         collision_sound.play();
         switch (direction) {

@@ -36,19 +36,11 @@ public class Sonido extends Applet implements Runnable, KeyListener {
     private int velocidad;
 
     private Omni mySaucer;
-    private ImageIcon elefante;		// Imagen del elefante
-    URL eURL_saucer = this.getClass().getResource("/imagenes/flying-saucer-2.gif");
-    URL eURL_collision = this.getClass().getResource("/imagenes/flying-saucer-collision-2.gif");
-
-    private int altura_elefante;
-    private int largo_elefante;
+    URL eURL_saucer = this.getClass().getResource("/imagenes/flying-saucer2.gif");
+    URL eURL_collision = this.getClass().getResource("/imagenes/flying-saucer-collision2.gif");
 
     private Image dbImage;	// Imagen a proyectar	
     private Graphics dbg;	// Objeto grafico
-    private boolean cambio_imagen;
-    private boolean en_colision;
-    private final int ciclos_en_colision_default = 25;
-    private int contador_ciclos_en_colision;
 
     private AudioClip sonido;       // Objeto AudioClip
     URL eaURL = this.getClass().getResource("/sonidos/8-bit-explosion.wav");
@@ -64,11 +56,10 @@ public class Sonido extends Applet implements Runnable, KeyListener {
         x_pos = (int) (Math.random() * (getWidth() / 4));    // posicion en x es un cuarto del applet;
         y_pos = (int) (Math.random() * (getHeight() / 4));    // posicion en y es un cuarto del applet
 
-        mySaucer = new Omni(x_pos, y_pos, eURL_saucer, eURL_collision, eaURL);
-        
         sonido = getAudioClip(eaURL);
-        mySaucer.setCollision_sound(sonido);
+        mySaucer = new Omni(x_pos, y_pos, eURL_saucer, eURL_collision, sonido);
         
+        setBackground(Color.WHITE);
         addKeyListener(this);
 
     }
@@ -272,6 +263,5 @@ public class Sonido extends Applet implements Runnable, KeyListener {
             g.drawString("Loading...", 10, 10);
         }
     }
-
 
 }
