@@ -22,17 +22,23 @@ import javax.swing.ImageIcon;
 public class Sonido extends Applet implements Runnable, KeyListener {
 
     private static final long serialVersionUID = 1L;
+
+    //Default code for direction
+    private final int UP = 1;
+    private final int DOWN = 2;
+    private final int LEFT = 3;
+    private final int RIGHT = 4;
+
     // Se declaran las variables.
     private int x_pos;				// Posicion x del elefante
     private int y_pos;				// Posicion y del elefante
     private int direccion;			// Direccion del elefante
     private int velocidad;
 
+    private Omni mySaucer;
     private ImageIcon elefante;		// Imagen del elefante
-    URL eURL_derecha = this.getClass().getResource("/imagenes/elefante.gif");
-    URL eURL_izquierda = this.getClass().getResource("/imagenes/burro-izquierda.gif");
-    URL eURL_colision_derecha = this.getClass().getResource("/imagenes/elefante-ouch.gif");
-    URL eURL_colision_izquierda = this.getClass().getResource("/imagenes/elefante-izquierda-ouch.gif");
+    URL eURL_saucer = this.getClass().getResource("/imagenes/flying-saucer.gif");
+    URL eURL_collision = this.getClass().getResource("/imagenes/flying-saucer-collision.gif");
 
     private int altura_elefante;
     private int largo_elefante;
@@ -45,6 +51,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
     private int contador_ciclos_en_colision;
 
     private AudioClip sonido;       // Objeto AudioClip
+    URL eaURL = this.getClass().getResource("/sonidos/elephant.wav");
 
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
@@ -54,25 +61,13 @@ public class Sonido extends Applet implements Runnable, KeyListener {
      */
     public void init() {
 
-        direccion = 4; //direccion inicial del elefante
-        velocidad = 1; //velocidad inicial del elefante
-        en_colision = false;
-        contador_ciclos_en_colision = -1;
-
         x_pos = (int) (Math.random() * (getWidth() / 4));    // posicion en x es un cuarto del applet;
         y_pos = (int) (Math.random() * (getHeight() / 4));    // posicion en y es un cuarto del applet
 
-        elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL_derecha));
-        altura_elefante = elefante.getIconHeight();
-        largo_elefante = elefante.getIconWidth();
-        cambio_imagen = false;
-
-        setBackground(Color.yellow);
+        mySaucer = new Omni(x_pos, y_pos, eURL_saucer, eURL_collision, eaURL);
 
         addKeyListener(this);
 
-        URL eaURL = this.getClass().getResource("/sonidos/elephant.wav");
-        sonido = getAudioClip(eaURL);
     }
 
     /**
@@ -98,8 +93,8 @@ public class Sonido extends Applet implements Runnable, KeyListener {
      */
     public void run() {
         while (true) {
-            actualiza();
-            checaColision();
+            mySaucer.updateCharacter();
+            checkCollision();
             repaint();    // Se actualiza el <code>Applet</code> repintando el contenido.
             try {
                 // El thread se duerme.
@@ -111,34 +106,10 @@ public class Sonido extends Applet implements Runnable, KeyListener {
     }
 
     /**
-     * Metodo que actualiza la posicion del objeto elefante
-     */
-    public void actualiza() {
-        switch (direccion) {
-            case 1: {
-                y_pos -= velocidad;
-                break;    //se mueve hacia arriba
-            }
-            case 2: {
-                y_pos += velocidad;
-                break;    //se mueve hacia abajo
-            }
-            case 3: {
-                x_pos -= velocidad;
-                break;    //se mueve hacia izquierda
-            }
-            case 4: {
-                x_pos += velocidad;
-                break;    //se mueve hacia derecha	
-            }
-        }
-    }
-
-    /**
      * Metodo que checa la colision del objeto elefante al colisionar con las
      * orillas del <code>Applet</code>.
      */
-    public void checaColision() {
+    public void checkCollision() {
         if (!en_colision) {
             switch (direccion) {
                 case 1: { //Revisa colision cuando sube
@@ -148,7 +119,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
                         contador_ciclos_en_colision = ciclos_en_colision_default;
 
                         direccion = 2;
-                        velocidad = 1; 
+                        velocidad = 1;
                         sonido.play();
                     }
                     break;
@@ -160,7 +131,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
                         contador_ciclos_en_colision = ciclos_en_colision_default;
 
                         direccion = 1;
-                        velocidad = 1; 
+                        velocidad = 1;
                         sonido.play();
                     }
                     break;
@@ -183,7 +154,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
                         cambio_imagen = true;
                         contador_ciclos_en_colision = ciclos_en_colision_default;
                         direccion = 3;
-                        velocidad = 1; 
+                        velocidad = 1;
                         sonido.play();
                     }
                     break;
@@ -334,7 +305,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
                      Cambio la imagen del elefante por la imagen de su colision.
                      Si la direccion es hacia la izquierda, quiere decir
                      que iba hacia la derecha y cuando chocó 
-                     checaColision() lo preparó para su cambio
+                     checkCollision() lo preparó para su cambio
                      y cambio su direccion.
                      Entonces pongo la imagen de colision de la derecha.
                      Si iba hacia la izquierda, arriba o abajo, cambio su imagen
