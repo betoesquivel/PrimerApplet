@@ -30,7 +30,7 @@ public class Sonido extends Applet implements Runnable, KeyListener {
 
     private ImageIcon elefante;		// Imagen del elefante
     URL eURL_derecha = this.getClass().getResource("/imagenes/elefante.gif");
-    URL eURL_izquierda = this.getClass().getResource("/imagenes/elefante-izquierda.gif");
+    URL eURL_izquierda = this.getClass().getResource("/imagenes/burro-izquierda.gif");
     URL eURL_colision_derecha = this.getClass().getResource("/imagenes/elefante-ouch.gif");
     URL eURL_colision_izquierda = this.getClass().getResource("/imagenes/elefante-izquierda-ouch.gif");
 
