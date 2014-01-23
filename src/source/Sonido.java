@@ -55,10 +55,11 @@ public class Sonido extends Applet implements Runnable, KeyListener {
 
         x_pos = (int) (Math.random() * (getWidth() / 4));    // posicion en x es un cuarto del applet;
         y_pos = (int) (Math.random() * (getHeight() / 4));    // posicion en y es un cuarto del applet
-
+        
         sonido = getAudioClip(eaURL);
         mySaucer = new Omni(x_pos, y_pos, eURL_saucer, eURL_collision, sonido);
         
+        this.setSize(800,500);
         setBackground(Color.WHITE);
         addKeyListener(this);
 
