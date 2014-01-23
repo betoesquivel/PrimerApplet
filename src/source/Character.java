@@ -55,7 +55,7 @@ public class Character extends Applet {
     //sound effects
     private AudioClip collision_sound;//collision sound
     private URL collision_sound_URL; //collision image_URL
-
+    
     public Character(int pos_x, int pos_y, URL image_URL, URL collision_image_URL, AudioClip collision_sound) {
         this.pos_x = pos_x;
         this.pos_y = pos_y;
@@ -228,16 +228,27 @@ public class Character extends Applet {
     }
 
     //ACTIONS
+    /**
+     * Method <I>stopColliding</I>
+     * Takes the character out of the collision state. 
+     */
     public void stopColliding() {
         in_collision = false;
         change_image = true;
     }
 
+    /**
+     * Method <I>decreaseCollisionCyclesCounter</I>
+     * Decreases the collision cycles counter by 1.
+     * This method is used over setCollision_cycles_counter
+     * for readability purposes.
+     */
     public void decreaseCollisionCyclesCounter() {
         setCollision_cycles_counter(collision_cycles_counter - 1);
     }
 
     /**
+     * Method <I>changeDirection</I>
      * Changes the direction of the character, the only difference from setter
      * is that here eventually I will check for future collisions. It also
      * updates the speed to the default.
@@ -250,6 +261,7 @@ public class Character extends Applet {
     }
 
     /**
+     * Method <I>deccelerate</I>
      * Decreases speed by acceleration parameter a
      *
      * @param a
@@ -259,6 +271,7 @@ public class Character extends Applet {
     }
 
     /**
+     * Method <I>deccelerate (Default)</I>
      * Decreases speed by default speed change...
      */
     public void deccelerate() {
@@ -266,6 +279,7 @@ public class Character extends Applet {
     }
 
     /**
+     * Method <I>accelerate</I>
      * Increases speed by acceleration parameter a
      *
      * @param a
@@ -275,6 +289,7 @@ public class Character extends Applet {
     }
 
     /**
+     * Method <I>accelerate (Default)</I>
      * Increases speed by default speed change...
      */
     public void accelerate() {
@@ -282,6 +297,7 @@ public class Character extends Applet {
     }
 
     /**
+     * Method <I>updateCharacterImage</I>
      * updates the character image based on status
      */
     private void updateCharacterImage() {
@@ -295,6 +311,7 @@ public class Character extends Applet {
     }
 
     /**
+     * Method <I>updateCharacterPosition</I>
      * updates the character position based on speed and direction class
      * attributes
      */
@@ -320,6 +337,7 @@ public class Character extends Applet {
     }
 
     /**
+     * Method <I>updateCharacter</I>
      * updates the character position and image based on status
      */
     public void updateCharacter() {
@@ -330,6 +348,7 @@ public class Character extends Applet {
     }
 
     /**
+     * Method <I>collide</I>
      * puts the object in a state of collision
      *
      * @param direction

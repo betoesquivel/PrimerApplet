@@ -9,7 +9,7 @@ import java.applet.AudioClip;
 import java.net.URL;
 
 /**
- *
+ * This class defines an omni, which is basically an extension of Character.
  * @author ppesq
  */
 public class Omni extends Character {
